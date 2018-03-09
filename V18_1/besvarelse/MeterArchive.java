@@ -77,5 +77,17 @@ public class MeterArchive
         meter.setOperational(false); 
         return true; 
     }
+    /**
+     * Lists all registered items. 
+     * Not explicitly part of the task, but 
+     * handy for testing and visualizing 
+     */
+    public void print()
+    {
+        for(Meter meter : meters)
+        {
+            System.out.println(meter.toString()); 
+        }
+    }
 }
 
