@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class MeterArchive {
+
     private ArrayList<Meter> meters;
 
     public MeterArchive() {
@@ -8,13 +9,16 @@ public class MeterArchive {
     }
 
     /**
-     * Adds a new meter to the archive 
+     * Adds a new meter to the archive
+     * Returns true if successfull, false if not  
      * @param meter - the meter to be added 
      */
-    public void add(Meter meter) {
-        //legge inn sjekk på om det alt er registrert 
-        //og returnere true/false accordingly 
-        meters.add(meter);
+    public boolean add(Meter meter) {
+        if (fetch(meter.getIdentification()) == null) {
+            meters.add(meter);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -23,6 +27,7 @@ public class MeterArchive {
      * @param identification - identification of the string to be removed 
      */
     public boolean remove(String identification) {
+        /*
         for (Meter meter : meters) {
             if (meter.getIdentification() == identification) {
                 meters.remove(meter);
@@ -30,6 +35,12 @@ public class MeterArchive {
             }
         }
         return false;
+        */
+
+        Meter meter = fetch(identification); 
+        if (meter == null) return false; 
+        meters.remove(meter); 
+        return true; 
     }
 
     /**
