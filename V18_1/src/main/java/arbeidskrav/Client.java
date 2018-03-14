@@ -6,19 +6,7 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("\n1: run demo: " + "\n2: exit");
-            //get input 
-            int input = scanner.nextInt();
-            if (input == 1) {
-                client.demo();
-                break;
-            } else if (input == 2) {
-                System.exit(0); 
-            } else
-                System.out.println("Not valid input :/");
-        }
+        client.displayMenu(); 
     }
 
     MeterArchive archive;
@@ -27,6 +15,24 @@ public class Client {
         archive = new MeterArchive();
     }
 
+    /**
+     * Present a mani menu for the user
+     */
+    public void displayMenu(){
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n1: run demo: " + "\n2: exit");
+            //get input 
+            int input = scanner.nextInt();
+            if (input == 1) {
+                demo();
+                break;
+            } else if (input == 2) {
+                System.exit(0);
+            } else
+                System.out.println("Not valid input :/");
+        }
+    }
     /**
      * Run a demo of the assignment 
      * NOTE: This is not an elegant implementation, but 
@@ -96,7 +102,7 @@ public class Client {
         sleep(2500);
         System.out.println("As you can see, the element is now gone.");
         sleep(3000);
-        System.out.println("We got a new one, sincethe old one stopped working.");
+        System.out.println("We got a new one, since the old one stopped working.");
         sleep(2000);
         System.out.println("\n\n\n\nI want to add the following: \n" + "max temperature: 20\n"
                 + "min temperature: -25\n" + "identification: TID123 (same as old one)\n"

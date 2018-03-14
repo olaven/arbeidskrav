@@ -1,6 +1,7 @@
 package arbeidskrav;
 
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 public class MeterArchive {
 
@@ -9,7 +10,7 @@ public class MeterArchive {
     public MeterArchive() {
         meters = new ArrayList<Meter>();
     }
-
+    
     /**
      * Adds a new meter to the archive
      * Returns true if successfull, false if not  
@@ -39,10 +40,11 @@ public class MeterArchive {
         return false;
         */
 
-        Meter meter = fetch(identification); 
-        if (meter == null) return false; 
-        meters.remove(meter); 
-        return true; 
+        Meter meter = fetch(identification);
+        if (meter == null)
+            return false;
+        meters.remove(meter);
+        return true;
     }
 
     /**
