@@ -5,8 +5,12 @@ import java.util.Scanner;
 public class Client {
 
     public static void main(String[] args) {
+        /*
         Client client = new Client();
         client.displayMenu(); 
+        */ 
+        MeterArchive a = new MeterArchive(); 
+        a.testing(); 
     }
 
     MeterArchive archive;

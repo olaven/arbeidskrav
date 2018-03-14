@@ -10,7 +10,15 @@ public class MeterArchive {
     public MeterArchive() {
         meters = new ArrayList<Meter>();
     }
-    
+    /**
+     * made for stesting 
+     * TODO: Delete this 
+     */
+    public void testing(){
+        FileManager fm = new FileManager(); 
+        String content = fm.getContent("./src/main/java/arbeidskrav/data/meterArchive.json"); 
+        System.out.println(content); 
+    }
     /**
      * Adds a new meter to the archive
      * Returns true if successfull, false if not  
@@ -30,16 +38,6 @@ public class MeterArchive {
      * @param identification - identification of the string to be removed 
      */
     public boolean remove(String identification) {
-        /*
-        for (Meter meter : meters) {
-            if (meter.getIdentification() == identification) {
-                meters.remove(meter);
-                return true;
-            }
-        }
-        return false;
-        */
-
         Meter meter = fetch(identification);
         if (meter == null)
             return false;
