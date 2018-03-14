@@ -51,7 +51,6 @@ public class StorageManager {
         ArrayList<Object> allData = new ArrayList<Object>();
 
         String data = getData();
-        String json = (isValidJson(data) ? data : "{" + getKey() + ":[]}");
 
         JSONArray jsonArray;
 
@@ -80,6 +79,15 @@ public class StorageManager {
             4 turn back to json-string 
             5.replace old content 
         */
+        String allData = getData();
+        
+        try {
+            JSONArray jsonArray = (JSONArray) new JSONObject(allData).get(getKey());
+            System.out.println(jsonArray); 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }        
+        //replaceData(); 
         return false;
     }
 
@@ -121,21 +129,24 @@ public class StorageManager {
      * Returns null if failure 
      */
     private String getData() {
+        String text = "";
         try {
             FileReader fr = new FileReader(getFile());
             BufferedReader reader = new BufferedReader(fr);
-            String text = "";
             String line = reader.readLine();
             while (line != null) {
                 text += line;
                 line = reader.readLine();
             }
             reader.close();
-            return text;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
+        if(isValidJson(text))
+            return text; 
+        else  
+            return "{'" + getKey() + "':[]}"; 
     }
 
     /**

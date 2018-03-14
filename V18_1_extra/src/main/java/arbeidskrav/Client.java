@@ -5,8 +5,12 @@ import java.util.Scanner;
 public class Client {
 
     public static void main(String[] args) {
+        /*
         Client client = new Client();
         client.displayMenu(); 
+        */
+        StorageManager storageManager = new StorageManager("src/main/java/arbeidskrav/data/meterArchive.json", "meters");
+        storageManager.add(new Thermometer());  
     }
 
     MeterArchive archive;
