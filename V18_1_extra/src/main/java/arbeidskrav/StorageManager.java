@@ -42,7 +42,7 @@ public class StorageManager {
     public StorageManager(String path, String jsonKey) {
         setPath(path);
         setJsonKey(jsonKey);
-        setFile(new File(path));
+        setFile(new File(getPath())); 
     }
 
     /**

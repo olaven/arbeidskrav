@@ -1,30 +1,13 @@
-package arbeidskrav;
+package arbeidskrav; 
 
 import java.util.ArrayList;
 
-/**
- * WRITE SOMETHING HERE (and in basic)
- */
-public class MeterArchive {
-    /**
-     * Notes on implementing StorageManager 
-     * 
-     * StorageManager does not care for permissions 
-     * -> it adds everything and removed everything, if 
-     * asked to. Specific rule have to be handled 
-     * in this class. 
-     * 
-     * Meters are no longer stored in this class, but 
-     * in the file. THus, methods in StorageManager 
-     * should be used for accessing them. 
-     */
+public class OldMeterArchive {
 
-    private final String PATH_TO_ARCHIVE = "./src/main/java/arbeidskrav/data/meterArchive.json"; 
-    private final String JSON_KEY = "meters"; 
-    private StorageManager storageManager; 
+    private ArrayList<Meter> meters;
 
-    public MeterArchive() {
-        storageManager = new StorageManager(PATH_TO_ARCHIVE, JSON_KEY);
+    public OldMeterArchive() {
+        meters = new ArrayList<Meter>();
     }
 
     /**
@@ -34,7 +17,7 @@ public class MeterArchive {
      */
     public boolean add(Meter meter) {
         if (fetch(meter.getIdentification()) == null) {
-            storageManager.add(meter);
+            meters.add(meter);
             return true;
         }
         return false;
@@ -46,12 +29,20 @@ public class MeterArchive {
      * @param identification - identification of the string to be removed 
      */
     public boolean remove(String identification) {
-        
+        /*
+        for (Meter meter : meters) {
+            if (meter.getIdentification() == identification) {
+                meters.remove(meter);
+                return true;
+            }
+        }
+        return false;
+        */
 
         Meter meter = fetch(identification);
         if (meter == null)
             return false;
-        storageManager.remove(meter);
+        meters.remove(meter);
         return true;
     }
 
@@ -59,8 +50,6 @@ public class MeterArchive {
      * Returns specified meter, if in the archive 
      */
     public Meter fetch(String identification) {
-        ArrayList<Meter> meters = castArrayListToMeters(storageManager.fetchAllData()); 
-
         for (Meter meter : meters) {
             if (meter.getIdentification() == identification) {
                 return meter;
@@ -104,32 +93,8 @@ public class MeterArchive {
      * handy for testing and visualizing 
      */
     public void print() {
-        ArrayList<Meter> meters = castArrayListToMeters(storageManager.fetchAllData()); 
         for (Meter meter : meters) {
             System.out.println(meter.toString());
         }
-    }
-    /**
-     * I can do this because only meters are added in this applciation 
-     * (hopefully)
-     */
-    private ArrayList<Meter> castArrayListToMeters(ArrayList<Object> list){
-        for(Object o : list){o.getClass();}
-        return new ArrayList<Meter>();
-        //return (ArrayList<Meter>)(ArrayList<?>) list; 
-    }
-     /**
-     * Converts JSONObject to instance of given class 
-     * @param object - JSONObject 
-     * @param class  - Convert to instance of this class 
-     * NOTE: Should ideally be moved to StorageManager and generalized 
-     */
-    private void convertToObject(){
-        org.json.JSONObject object = new JSONObject(); 
-        com.google.gson.Gson gson = new com.google.gson.Gson(); 
-
-        Meter meter = gson.fromJson(object.toString(), Meter.class);
-
-        System.out.println(meter); 
     }
 }

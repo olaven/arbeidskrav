@@ -9,8 +9,8 @@ public class Client {
         Client client = new Client();
         client.displayMenu(); 
         */
-        StorageManager storageManager = new StorageManager("src/main/java/arbeidskrav/data/meterArchive.json", "meters");
-        storageManager.add(new Thermometer());  
+        MeterArchive meterArchive = new MeterArchive(); 
+        meterArchive.add(new Clock()); 
     }
 
     MeterArchive archive;

@@ -1,6 +1,1 @@
-{
-    "meters": 
-        [
-            
-        ]
-}
+{"meters":[{"map":{"map":{"map":{"map":{"map":{"map":{"map":{"identification":"unspecified","maxTemp":45.0,"operational":false,"location":"unspecified","minTemp":-25.0}}}}}}}},{"map":{"map":{"map":{"identification":"unspecified","maxTemp":45.0,"operational":false,"location":"unspecified","minTemp":-25.0}}}},{"minInterval":0.5,"DEFAULT_MIN_INTERVAL":0.5,"identification":"unspecified","location":"unspecified","operational":false}]}
