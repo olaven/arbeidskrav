@@ -114,22 +114,11 @@ public class MeterArchive {
      * (hopefully)
      */
     private ArrayList<Meter> castArrayListToMeters(ArrayList<Object> list){
-        for(Object o : list){o.getClass();}
+        for(Object o : list){
+            o = storageManager.convertJSONObjectToObject(o, Meter.class); 
+            o.getClass();
+        }
         return new ArrayList<Meter>();
         //return (ArrayList<Meter>)(ArrayList<?>) list; 
-    }
-     /**
-     * Converts JSONObject to instance of given class 
-     * @param object - JSONObject 
-     * @param class  - Convert to instance of this class 
-     * NOTE: Should ideally be moved to StorageManager and generalized 
-     */
-    private void convertToObject(){
-        org.json.JSONObject object = new JSONObject(); 
-        com.google.gson.Gson gson = new com.google.gson.Gson(); 
-
-        Meter meter = gson.fromJson(object.toString(), Meter.class);
-
-        System.out.println(meter); 
     }
 }

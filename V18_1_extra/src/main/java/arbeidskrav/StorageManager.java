@@ -1,5 +1,6 @@
 package arbeidskrav;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -11,6 +12,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
@@ -127,6 +129,21 @@ public class StorageManager {
         list.add(newObject); 
         String jsonFromList = new Gson().toJson(list);
         replaceData("{\"" + getKey() + "\":" + jsonFromList + "}");
+    }
+
+    /**
+     * Converts JSONObject to instance of given class 
+     * Returns an Object (can be casted)
+     * @param unconverted - JSONObject 
+     * @param class       - Convert to instance of this class 
+     */
+    public Object convertJSONObjectToObject(Object unconverted, Class<?> c){ //did not like "class" as var name 
+
+        Gson gsonBuilder = new GsonBuilder().create();
+        unconverted = (JSONObject) unconverted; 
+        c converted = gsonBuilder.fromJson(unconverted.toString(), Meter.class);//meter for testing 
+
+        return converted; 
     }
 
     /**

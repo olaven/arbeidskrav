@@ -10,7 +10,7 @@ public class Client {
         client.displayMenu(); 
         */
         MeterArchive meterArchive = new MeterArchive(); 
-        meterArchive.add(new Clock()); 
+        meterArchive.print();
     }
 
     MeterArchive archive;
@@ -42,7 +42,7 @@ public class Client {
      * NOTE: This is not an elegant implementation, but 
      * then again, that is not really the point of this method. 
      */
-    public void demo() {
+    public void demo() { 
         System.out.println("Hi^^ Lets get this demo started!");
         System.out.println("filling with demo data.. ");
         populate();
