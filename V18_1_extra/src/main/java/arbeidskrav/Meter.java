@@ -1,6 +1,6 @@
 package arbeidskrav;
 
-public abstract class Meter {
+public class Meter { //no longer abstract -> needs to be instanciated when converting from JSON 
     private String identification;
     private String location;
     private boolean operational;
@@ -45,8 +45,10 @@ public abstract class Meter {
      * Returns a String with the objects current state
     */
     public String toString() {
-        return "" + "\nidentification: " + getIdentification() + "\nlocation: " + getLocation() + "\noperational: "
-                + (getOperational() ? "yes" : "no");
+        return "" + 
+            "\nidentification: " + getIdentification() + 
+            "\nlocation: " + getLocation() + 
+            "\noperational: " + (getOperational() ? "yes" : "no");
     }
 
     //set-methods 

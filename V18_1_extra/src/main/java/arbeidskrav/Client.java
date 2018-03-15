@@ -9,8 +9,10 @@ public class Client {
         Client client = new Client();
         client.displayMenu(); 
         */
-        MeterArchive meterArchive = new MeterArchive(); 
-        meterArchive.print();
+        MeterArchive archive = new MeterArchive(); 
+        archive.clean(); 
+        archive.add(new Thermometer(-20.5, 34.0, "TID123", "H125", true)); 
+        archive.add(new Clock(4.0, "CLOCK123", "H125", true));
     }
 
     MeterArchive archive;
@@ -25,7 +27,7 @@ public class Client {
     public void displayMenu(){
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("\n1: run demo: " + "\n2: exit");
+            System.out.println("\n1: run demo (wipes data)" + "\n2: exit");
             //get input 
             int input = scanner.nextInt();
             if (input == 1) {
@@ -36,6 +38,7 @@ public class Client {
             } else
                 System.out.println("Not valid input :/");
         }
+        scanner.close(); 
     }
     /**
      * Run a demo of the assignment 
@@ -43,6 +46,7 @@ public class Client {
      * then again, that is not really the point of this method. 
      */
     public void demo() { 
+        archive.clean();
         System.out.println("Hi^^ Lets get this demo started!");
         System.out.println("filling with demo data.. ");
         populate();

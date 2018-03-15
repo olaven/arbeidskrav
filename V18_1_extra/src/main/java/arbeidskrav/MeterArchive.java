@@ -60,10 +60,9 @@ public class MeterArchive {
      */
     public Meter fetch(String identification) {
         ArrayList<Meter> meters = castArrayListToMeters(storageManager.fetchAllData()); 
-
         for (Meter meter : meters) {
-            if (meter.getIdentification() == identification) {
-                return meter;
+            if (meter.getIdentification() == identification){
+                return meter; 
             }
         }
         return null;
@@ -76,11 +75,15 @@ public class MeterArchive {
      * @param newLocation    - new location of the meter 
      */
     public boolean move(String identification, String newLocation) {
-        Meter meter = fetch(identification);
-        if (meter == null)
+        Meter oldMeter = fetch(identification);
+        if (oldMeter == null) {
             return false;
+        }
+            
         //the meter was fetched, starting to alter 
-        meter.setLocation(newLocation);
+        Meter newMeter = oldMeter; 
+        newMeter.setLocation(newLocation);
+        storageManager.alter(oldMeter, newMeter);
         return true;
     }
 
@@ -110,15 +113,22 @@ public class MeterArchive {
         }
     }
     /**
+     * USED WITH CAUTION
+     * Cleans the archive completely. 
+     */
+    public void clean(){
+        storageManager.replaceData("");
+    }
+    /**
      * I can do this because only meters are added in this applciation 
      * (hopefully)
      */
     private ArrayList<Meter> castArrayListToMeters(ArrayList<Object> list){
-        for(Object o : list){
-            o = storageManager.convertJSONObjectToObject(o, Meter.class); 
-            o.getClass();
+        ArrayList<Meter> meters = new ArrayList<Meter>(); 
+        for (Object o : list) {
+            o = storageManager.convertJSONObjectToObject(o);
+            meters.add((Meter) o);  
         }
-        return new ArrayList<Meter>();
-        //return (ArrayList<Meter>)(ArrayList<?>) list; 
+        return meters;
     }
 }

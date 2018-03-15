@@ -1,6 +1,5 @@
 package arbeidskrav;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -97,7 +96,7 @@ public class StorageManager {
      * Remove specified object from data
      * @param object - Object to be removed 
      */
-    public void remove(Object object) {//TODO: IMPLEMENT
+    public void remove(Object object) {
         /*
             1. get all data from current archive as ArrayList
             2. remove object from array 
@@ -135,13 +134,15 @@ public class StorageManager {
      * Converts JSONObject to instance of given class 
      * Returns an Object (can be casted)
      * @param unconverted - JSONObject 
-     * @param class       - Convert to instance of this class 
+     * @param class       - Convert to instance of this class //not used, should be implemented once I figure out how
      */
-    public Object convertJSONObjectToObject(Object unconverted, Class<?> c){ //did not like "class" as var name 
-
-        Gson gsonBuilder = new GsonBuilder().create();
+    public Object convertJSONObjectToObject(Object unconverted){ 
+        //GsonBuilder gsonBuilder = new GsonBuilder.create(); 
+        Gson gson = new Gson(); 
         unconverted = (JSONObject) unconverted; 
-        c converted = gsonBuilder.fromJson(unconverted.toString(), Meter.class);//meter for testing 
+        final Object converted = gson.fromJson(unconverted.toString(), Meter.class); //meter should not be specified here, but it works for now
+
+        //final MyClass myClass = gson.fromJson(jsonString, MyClass.class);
 
         return converted; 
     }
@@ -173,13 +174,13 @@ public class StorageManager {
 
     /**
      * Replaces content in file 
-     * @param data - new data
+     * @param newData - new data
      */
-    private void replaceData(String data) {
+    public void replaceData(String newData) {
         try {
             FileWriter fw = new FileWriter(getFile());
             BufferedWriter writer = new BufferedWriter(fw);
-            writer.write(data);
+            writer.write(newData);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
