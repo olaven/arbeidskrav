@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -17,11 +18,17 @@ import java.util.ArrayList;
  * This class handles everything about storing data for this application
  * It provides methods for: 
  * -fetching all data - .fetchAll
+ *  * -adding data       - .add
  * -removing data     - .remove
- * -adding data       - .add
  * -alter data        - .alter  
  */
 public class StorageManager {
+
+    /**
+     * Noteas about refactoring: 
+     * .add, .remove and .alter are very similar
+     * (private) .getAllData is ugly. Could probably be improved.
+     */
 
     private String path;
     private String key;
@@ -55,7 +62,7 @@ public class StorageManager {
         JSONArray jsonArray;
 
         try {
-            jsonArray = (JSONArray) new JSONObject(json).get(getKey());
+            jsonArray = (JSONArray) new JSONObject(data).get(getKey());
             for (int i = 0; i < jsonArray.length(); i++) {
                 allData.add(jsonArray.get(i));
             }
@@ -68,43 +75,37 @@ public class StorageManager {
 
     /**
      * Add specified boject to data
-     * Returns true if successful, false if not 
      * @param object - Object to be removed
      */
-    public boolean add(Object object) {//TODO: IMPLEMENT
+    public void add(Object object) {//TODO: IMPLEMENT
         /*
-            1. get all data from current archive 
-            2. turn into array 
-            3. add new object to array 
-            4 turn back to json-string 
-            5.replace old content 
+            1. get all data from current archive as ArrayList
+            2. add new object to ArrayList
+            3 turn back to json-string 
+            4.replace old content 
         */
-        String allData = getData();
-        
-        try {
-            JSONArray jsonArray = (JSONArray) new JSONObject(allData).get(getKey());
-            System.out.println(jsonArray); 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }        
-        //replaceData(); 
-        return false;
+        ArrayList<Object> list = fetchAllData();
+
+        list.add(object);
+        String jsonFromList = new Gson().toJson(list);
+        replaceData("{\"" + getKey() + "\":" + jsonFromList + "}");
     }
 
     /**
      * Remove specified object from data
-     * Returns true if successful, false if not 
      * @param object - Object to be removed 
      */
-    public boolean remove(Object object) {//TODO: IMPLEMENT
+    public void remove(Object object) {//TODO: IMPLEMENT
         /*
-            1. get all data from current archive 
-            2. turn into array 
-            3. remove object from array 
-            4 turn back to json-string 
-            5.replace old content 
+            1. get all data from current archive as ArrayList
+            2. remove object from array 
+            3. turn back to json-string 
+            4.replace old content 
         */
-        return false;
+        ArrayList<Object> list = fetchAllData();
+        list.remove(object);
+        String jsonFromList = new Gson().toJson(list);
+        replaceData("{\"" + getKey() + "\":" + jsonFromList + "}");
     }
 
     /**
@@ -112,7 +113,7 @@ public class StorageManager {
      * @param oldObject - Object to be replaced 
      * @param newObject - Object to replace
      */
-    public boolean alter(Object oldObject, Object newObject) {//TODO: IMPLEMENT
+    public void alter(Object oldObject, Object newObject) {//TODO: IMPLEMENT
         /*
             1. get all data from current archive 
             2. turn into array 
@@ -121,7 +122,11 @@ public class StorageManager {
             5 turn back to json-string 
             6.replace old content 
         */
-        return false;
+        ArrayList<Object> list = fetchAllData(); 
+        list.remove(oldObject);  
+        list.add(newObject); 
+        String jsonFromList = new Gson().toJson(list);
+        replaceData("{\"" + getKey() + "\":" + jsonFromList + "}");
     }
 
     /**
@@ -143,10 +148,10 @@ public class StorageManager {
             e.printStackTrace();
             return null;
         }
-        if(isValidJson(text))
-            return text; 
-        else  
-            return "{'" + getKey() + "':[]}"; 
+        if (isValidJson(text))
+            return text;
+        else
+            return "{'" + getKey() + "':[]}";
     }
 
     /**
