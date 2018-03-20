@@ -1,1 +1,1 @@
-{"meters":[{"minInterval":0.5,"DEFAULT_MIN_INTERVAL":0.5,"identification":"unspecified","location":"unspecified","operational":false}]}
+{"meters":[{"map":{"identification":"TID123","maxTemp":34.0,"operational":true,"location":"H125","minTemp":-20.5}},{"minInterval":4.0,"DEFAULT_MIN_INTERVAL":0.5,"identification":"CLOCK123","location":"H125","operational":true}]}

@@ -1,3 +1,3 @@
-# Running this program 
-* ```javac * ```
+# Running this program
+* ```javac Client.java ```
 * ```java Client ```

@@ -1,38 +1,19 @@
-package arbeidskrav;
+package arbeidskrav; 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import junit.framework.Assert;
+import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest {
+
+    @Test
+    public void testAdd() {
+        MeterArchive archive = new MeterArchive(); 
+        Meter t1 = new Thermometer(20, 20, "SAMEID", "PLACEMENT1", true); 
+        Meter t2 = new Thermometer(20, 20, "SAMEID", "PLACEMENT2", true);
+        //adding the first meter -> does not exist 
+        Assert.assertEquals(archive.add(t1), true);
+        //adding a meter ID that already exists
+        Assert.assertEquals(archive.add(t2), false);
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
 }
