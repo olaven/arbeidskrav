@@ -37,10 +37,11 @@ public class MeterArchive {
         return false;
         */
 
-        Meter meter = fetch(identification); 
-        if (meter == null) return false; 
-        meters.remove(meter); 
-        return true; 
+        Meter meter = fetch(identification);
+        if (meter == null)
+            return false;
+        meters.remove(meter);
+        return true;
     }
 
     /**
@@ -85,13 +86,9 @@ public class MeterArchive {
     }
 
     /**
-     * Lists all registered items. 
-     * Not explicitly part of the task, but 
-     * handy for testing and visualizing 
+     * Returns all registered meters as an ArrayList 
      */
-    public void print() {
-        for (Meter meter : meters) {
-            System.out.println(meter.toString());
-        }
+    public ArrayList<Meter> getMeters() {
+        return meters;
     }
 }

@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList; 
 
 public class Client {
 
@@ -13,10 +14,11 @@ public class Client {
                 client.demo();
                 break;
             } else if (input == 2) {
-                System.exit(0); 
+                System.exit(0);
             } else
                 System.out.println("Not valid input :/");
         }
+        scanner.close(); 
     }
 
     MeterArchive archive;
@@ -37,7 +39,7 @@ public class Client {
         sleep(1000);
         System.out.println("In 4 seconds, I will print all data!");
         sleep(4000);
-        archive.print();
+        printMeters(); 
         sleep(3000);
         System.out.println();
         System.out.println("TID123 is located at H125.\nI want to move it..");
@@ -90,7 +92,7 @@ public class Client {
         sleep(3000);
         System.out.println("Okay, let's look at all the registered meters");
         sleep(2500);
-        archive.print();
+        printMeters(); 
         sleep(2500);
         System.out.println("As you can see, the element is now gone.");
         sleep(3000);
@@ -108,6 +110,16 @@ public class Client {
         System.out.println("See! It is added!");
         sleep(3000);
         System.out.println("Thanks for watching this short demo :)");
+    }
+
+    /**
+     * Prints all meters
+     */
+    private void printMeters() {
+        ArrayList<Meter> meters = archive.getMeters(); 
+        for(Meter meter : meters){
+            System.out.println(meter.toString()); 
+        }
     }
 
     /**
