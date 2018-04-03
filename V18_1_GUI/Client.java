@@ -6,10 +6,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button; 
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField; 
 import javafx.scene.text.Font; 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+
+import java.util.HashMap; 
 /**
  * The Client gives a visual interface to the user 
  */
@@ -17,20 +18,73 @@ public class Client extends Application{
 
     MeterArchive archive = new MeterArchive(); 
 
+    private int width = 600;
+    private int height = 400;
+
+    HashMap<String, Scene> scenes; 
+    private Scene mainScene; 
+    private Scene addScene; 
+
     TextField textInput; 
 
+    public static void main(String[] args) {
+        launch(args); 
+    }
+    
+    public Client(){
+        scenes = new HashMap<String, Scene>(); 
+        mainScene = getMainScene(); 
+        addScene = getAddScene(); 
+        //add scenes to hashmap 
+        scenes.put("mainScene", mainScene); 
+        scenes.put("addScene", addScene); 
+    }
+    
     @Override
     public void start(Stage stage){
-        //REFACTOR IN FUTURE 
-        int width = 600; 
-        int height = 400; 
+
+        //main scene is the first scene to boot 
+        Scene scene = scenes.get("mainScene"); 
+        stage.setScene(scene); 
+        stage.setTitle("Meter Archive"); 
+        stage.show(); 
+    }
+
+    /**
+     * Adds a meter to the archive 
+     */
+    public void addMeter(ActionEvent event){
+        //textInput.getText(); 
+
+    }
+
+    /**
+     * Removes a meter in archive 
+     */
+    public void removeMeter(ActionEvent event){
+
+    }
+
+    /**
+     * Displays meters in archive
+     * Use scrollpane for displaying
+     */
+    public void displaymeters(ActionEvent event){
+
+    }
+
+
+    /**
+     * Builds and returns main scene 
+     */
+    private Scene getMainScene(){        
         //labels
         Label heading = new Label("Meter Archive");
         heading.setMinWidth((width / 3) / 2);
         heading.setMinHeight((height / 3) / 2);  
         heading.setFont(new Font(height / 18)); 
 
-        Label feedback = new Label("test"); 
+        Label feedback = new Label("Feedback"); 
         feedback.setMinWidth(width / 3);
         feedback.setMinHeight(height / 3);
         feedback.setFont(new Font(height / 18));
@@ -64,29 +118,31 @@ public class Client extends Application{
         gridPane.add(displayButton, 4, 1, 2, 1);
         gridPane.add(textInput    , 2, 2, 1, 1); 
 
-        stage.setScene(new Scene(gridPane, width, height)); 
-        stage.setTitle("Meter Archive"); 
-        stage.show(); 
+        return (new Scene(gridPane, getWidth(), getHeight())); 
     }
-
+    
     /**
-     * Adds a meter to the archive 
+     * builds and returns the scene for adding 
      */
-    public void addMeter(ActionEvent event){
-        //textInput.getText(); 
+    public Scene getAddScene(){
+        GridPane layout = new GridPane(); 
+
+        TextField test = new TextField("Test, adding"); 
+        layout.add(test, 0, 0); 
+
+        return new Scene(layout, getWidth(), getHeight()); 
     }
-
-    /**
-     * Removes a meter in archive 
-     */
-    public void removeMeter(ActionEvent event){
-
+    
+    public int getHeight(){
+        return height; 
     }
-
-    /**
-     * Displays meters in archive
-     */
-    public void displaymeters(ActionEvent event){
-
+    public int getWidth(){
+        return width; 
+    }
+    public void setHeight(int height){
+        this.height = height; 
+    }
+    public void setWidth(int width){
+        this.width = width; 
     }
 }
