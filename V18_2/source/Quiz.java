@@ -61,10 +61,10 @@ public class Quiz {
      * file at some point 
      */
     public void addTestQuestions(){
-        questions.add(new Question("Name the capital?", "Oslo", "images/norway.png")); 
-        questions.add(new Question("Name the capital?", "Copenhagen", "images/denmark.png"));
-        questions.add(new Question("Name the capital?", "Stockholm", "images/sweden.png"));
-        questions.add(new Question("Name the capital?", "Haag", "images/netherlands.png"));
+        questions.add(new Question("Name the capital?", "Oslo", "file:../images/norway.png")); 
+        questions.add(new Question("Name the capital?", "Copenhagen", "file:../images/denmark.png"));
+        questions.add(new Question("Name the capital?", "Stockholm", "file:../images/sweden.png"));
+        questions.add(new Question("Name the capital?", "Haag", "file:../images/netherlands.png"));
     }
     
     //get 

@@ -64,10 +64,11 @@ public class QuizClient extends Application{
     public void start(Stage stage){
 
         headerLabel.setFont(new Font(100)); headerLabel.setText(quiz.getTitle()); 
+
         imageView.setImage(new Image(getCurrentQuestion().getImagePath(), imageWidth, imageHeight, false, false));
         questionLabel.setText(getCurrentQuestion().getText()); 
         inputField.setPromptText("enter answer");
-        submitButton.setOnAction(this::buttonPress); 
+        submitButton.setOnAction(this::buttonPress); submitButton.setDefaultButton(true); 
         statusField.setText(getStatus()); 
 
         
