@@ -65,15 +65,16 @@ public class Quiz {
     }
 
     /**
-     * Adds questions to the list 
-     * Could be replaed with reading from a 
-     * file at some point 
+     * Adds a question if not a duplicate text + answer combination
+     * return true if successful, false if not
+     * (could use .getQuestions.add(), but that is messy)
+     * @param question the question to be added 
      */
-    public void addTestQuestions() {
-        questions.add(new Question("Name the capital?", "Oslo", "file:../images/norway.png"));
-        questions.add(new Question("Name the capital?", "Copenhagen", "file:../images/denmark.png"));
-        questions.add(new Question("Name the capital?", "Stockholm", "file:../images/sweden.png"));
-        questions.add(new Question("Name the capital?", "Haag", "file:../images/netherlands.png"));
+    public boolean add(Question question){
+        if(questions.contains(question))
+            return false; 
+        questions.add(question); 
+        return true; 
     }
 
     //get 
@@ -91,6 +92,10 @@ public class Quiz {
 
     public int getQuestionCount() {
         return questions.size();
+    }
+
+    public ArrayList<Question> getQuestions(){
+        return questions; 
     }
 
     //set

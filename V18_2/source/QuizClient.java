@@ -16,8 +16,9 @@ import javafx.scene.image.Image;
 import javafx.event.ActionEvent;
 
 /**
- * Client
- *  */
+ * QuizClient
+ * Displays an answerable quiz to the user 
+ * */
 public class QuizClient extends Application {
     //Non-GUI-fields 
     private int width;
@@ -39,7 +40,8 @@ public class QuizClient extends Application {
     private Button restartButton;
 
     //Local-class-fields 
-    private Quiz quiz;
+    private QuizesManager quizesManager; 
+    private Quiz selectedQuiz; 
 
     public QuizClient() {
         //Non-GUI-fields 
@@ -58,14 +60,16 @@ public class QuizClient extends Application {
         statusField = new Label();
 
         //Local-class-fields 
-        quiz = new Quiz("Capital Quiz!");
-        quiz.addTestQuestions();
+        quizesManager = new QuizesManager(); 
+        selectedQuiz = quizesManager.getQuiz("Capital Quiz!"); //Default quiz for now 
     }
-
+    /**
+     * Runs on start -> required by Application 
+     */
     public void start(Stage stage) {
 
         headerLabel.setFont(new Font(100));
-        headerLabel.setText(quiz.getTitle());
+        headerLabel.setText(selectedQuiz.getTitle());
 
         imageView.setImage(new Image(getCurrentQuestion().getImagePath(), imageWidth, imageHeight, false, false));
         
@@ -110,14 +114,14 @@ public class QuizClient extends Application {
         if (event.getSource().equals(submitButton)) {
             //check if the question is correct 
             String submittedAnswer = inputField.getText();
-            quiz.handleAnswer(submittedAnswer);
+            selectedQuiz.handleAnswer(submittedAnswer);
             Question question = getCurrentQuestion();
 
             //check if the question turned out correct 
             if (question.getCorrect())
                 setCorrectCounter(getCorrectCounter() + 1);
             //if there is a new question
-            if (quiz.nextQuestion()) {
+            if (selectedQuiz.nextQuestion()) {
                 updateDisplayedQuestion();
             } else {
                 displayEndOptions();
@@ -127,7 +131,7 @@ public class QuizClient extends Application {
             Platform.exit();
         }
         if (event.getSource().equals(restartButton)) {
-            quiz.setCurrentQuestionIndex(0);
+            selectedQuiz.setCurrentQuestionIndex(0);
             setCorrectCounter(0);
             submitButton.setDisable(false);
             start(new Stage());
@@ -163,7 +167,7 @@ public class QuizClient extends Application {
 
     //get 
     private Question getCurrentQuestion() {
-        return quiz.getCurrentQuestion();
+        return selectedQuiz.getCurrentQuestion();
     }
 
     public int getCorrectCounter() {
@@ -171,7 +175,7 @@ public class QuizClient extends Application {
     }
 
     public String getStatus() {
-        return (getCorrectCounter() + "/" + quiz.getQuestionCount()).toString();
+        return (getCorrectCounter() + "/" + selectedQuiz.getQuestionCount()).toString();
     }
 
     //set
