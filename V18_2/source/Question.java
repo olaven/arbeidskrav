@@ -47,13 +47,11 @@ public class Question {
 
     //set
     public void setText(String text) {
-        if (text.length() > 0)
-            this.text = text;
+        this.text = text;
     }
 
     public void setAnswer(String answer) {
-        if (answer.length() > 0)
-            this.answer = answer;
+        this.answer = answer;
     }
 
     public void setImagePath(String imagePath) {
