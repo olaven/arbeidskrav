@@ -1,4 +1,3 @@
-import java.io.File; 
 
 /**
  * Question
@@ -9,25 +8,25 @@ import java.io.File;
 public class Question {
     private String text; 
     private String answer; 
-    private File image;
+    private String imagePath;
     private boolean correct; 
 
     //This is the constructor I intend to use 
-    public Question(String text, String answer, File image) {
-        this(text, answer, image, false);
+    public Question(String text, String answer, String imagePath) {
+        this(text, answer, imagePath, false);
     }
     //this constructor may come in handy at some point NOTE: remove if not
-    public Question(String text, String answer, File image, boolean correct){
+    public Question(String text, String answer, String imagePath, boolean correct){
         setText(text); 
         setAnswer(answer.toLowerCase()); 
-        setImage(image); 
+        setImagePath(imagePath); 
         setCorrect(correct); //this option may come in handy. Remove if not 
     }
 
     //get 
     public String getText(){return text;}
     public String getAnswer(){return answer;}
-    public File getImage(){return image;}
+    public String getImagePath(){return imagePath;}
     public boolean getCorrect(){return correct;}
 
     //set
@@ -39,8 +38,8 @@ public class Question {
         if(answer.length() > 0)
             this.answer = answer; 
     }
-    public void setImage(File image){
-        this.image = image; 
+    public void setImagePath(String imagePath){
+        this.imagePath = imagePath; 
     }
     public void setCorrect(boolean correct){
         this.correct = correct; 
