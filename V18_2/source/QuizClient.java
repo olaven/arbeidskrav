@@ -11,11 +11,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ListView; 
 import javafx.scene.text.Font;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
 import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent; 
 
 /**
  * QuizClient
@@ -39,15 +41,20 @@ public class QuizClient extends Application {
     private String mainStyleSheetPath = "file:../stylesheets/main.css";
 
     //GUI-fields 
+    //-chooseScene 
+    Label chooseHeader; 
+    ListView<Label> quizNamesView;
+    //-quizScene 
     private Label headerLabel;
     private ImageView imageView;
     private Label questionLabel;
     private TextField inputField;
     private Button submitButton;
     private Label statusField;
-
+    //-endScene
     private Button quitButton;
     private Button restartButton;
+    
 
     //My-class-fields 
     private QuizesManager quizesManager; 
@@ -56,10 +63,7 @@ public class QuizClient extends Application {
     //Inner-class-fields 
     SceneFactory sceneFactory; 
 
-    //Scenes 
-    Scene quizScene; 
-    Scene chooseScene; 
-    Scene endScene;
+
 
     public QuizClient() {
         //Non-GUI-fields 
@@ -70,12 +74,20 @@ public class QuizClient extends Application {
         correctCounter = 0;
 
         //GUI-fields 
+        //-chooseScene 
+        chooseHeader = new Label("Choose Quiz"); 
+        quizNamesView = new ListView<Label>();
+
+        //-quizScene 
         headerLabel = new Label();
         imageView = new ImageView();
         questionLabel = new Label();
         inputField = new TextField();
         submitButton = new Button("submit");
         statusField = new Label();
+        //-endScene 
+        quitButton = new Button("Quit");
+        restartButton = new Button("Restart"); 
 
         //My-class-fields 
         quizesManager = new QuizesManager(); 
@@ -84,50 +96,72 @@ public class QuizClient extends Application {
         //Inner-class-fields 
         sceneFactory = new SceneFactory(); 
 
-        //Scenes 
-        quizScene = sceneFactory.quizScene(); 
-        chooseScene = sceneFactory.chooseScene(); 
-        endScene = sceneFactory.endScene(); 
     }
     /**
      * Runs on start -> required by Application 
      */
     public void start(Stage stage) {
-        stage.setScene(quizScene);
-        stage.setTitle("Quiz!");
-        stage.show();
+        displayChooseScene(); 
     }
 
     /**
      * Updates data in relevant GUI-fields
      * -> image 
      * -> question
-     * -> status 
      */
     public void updateDisplayedQuestion() {
         Question question = getCurrentQuestion();
         //NOT ADDED QUESTION TEXT
         imageView.setImage(new Image(question.getImagePath(), imageWidth, imageWidth, false, false));
         questionLabel.setText(question.getText());
-        statusField.setText(getStatus());
     }
 
+    /**
+     * Updates status (x/total)
+     */
+    public void updateDisplayedStatus(){
+        statusField.setText(getStatus()); 
+    }
+
+    /**
+     * 
+     */
+    private void displayChooseScene() {
+        displayScene(sceneFactory.chooseScene(), "Choose scene."); 
+    }
     
+    /**
+     * 
+     */
+    private void displayQuizScene() {
+
+        if(submitButton.isDisabled())
+            toggleButton(submitButton);  
+
+        displayScene(sceneFactory.quizScene(), "Quiz!"); 
+    }
 
     /**
      * Deactivates "submit button" and opens a stage 
      * with endScene as scene 
      */
-    private void displayEndOptions() {
+    private void displayEndScene() {
 
         toggleButton(submitButton); 
+        displayScene(sceneFactory.endScene(), "Quiz over."); 
+    }
 
-        //create a new stage end set endScene as its scene 
+    /**
+     * Displays specified scene in stage, with specified title. 
+     * Container method -> reused in .display*SPECIFICSCENE*() above 
+     */
+    private void displayScene(Scene scene, String title){
         Stage stage = new Stage(); 
-        stage.setTitle("Quiz over"); 
-        stage.setScene(endScene); 
+        stage.setScene(scene); 
+        stage.setTitle(title); 
         stage.show(); 
     }
+
 
     /**
      * Toggles wether the specified button is toggled or not 
@@ -137,20 +171,28 @@ public class QuizClient extends Application {
     }
 
     //get 
+    public Quiz getSelectedQuiz(){
+        return selectedQuiz;
+    }
+
     private Question getCurrentQuestion() {
         return selectedQuiz.getCurrentQuestion();
     }
 
-    public int getCorrectCounter() {
+    private int getCorrectCounter() {
         return correctCounter;
     }
 
-    public String getStatus() {
+    private String getStatus() {
         return (getCorrectCounter() + "/" + selectedQuiz.getQuestionCount()).toString();
     }
 
     //set
-    public void setCorrectCounter(int correctCounter) {
+    private void setSelectedQuiz(Quiz selectedQuiz){
+        this.selectedQuiz = selectedQuiz; 
+    }
+
+    private void setCorrectCounter(int correctCounter) {
         if (correctCounter >= 0)
             this.correctCounter = correctCounter;
     }
@@ -166,15 +208,24 @@ public class QuizClient extends Application {
          */
         public Scene chooseScene(){
             ArrayList<String> quizNames = quizesManager.getQuizNames(); 
-            System.out.println("chooseScene not implemented yet!"); 
-            return new Scene(new VBox()); //placeholder 
+            VBox vBox = new VBox(); 
+
+            for(String quizName : quizNames){
+                Label label = new Label(quizName); 
+                label.setOnMouseClicked(this::labelPressed); 
+                quizNamesView.getItems().add(label); 
+            }
+
+            vBox.getChildren().addAll(chooseHeader, quizNamesView); 
+
+            return new Scene(vBox, width / 4, height / 4); 
         }
         /**
          * Where questions are answered.
          */
         public Scene quizScene(){
             headerLabel.setFont(new Font(100));
-            headerLabel.setText(selectedQuiz.getTitle());
+            headerLabel.setText(getSelectedQuiz().getTitle());
 
             imageView.setImage(new Image(getCurrentQuestion().getImagePath(), imageWidth, imageHeight, false, false));
             
@@ -196,10 +247,7 @@ public class QuizClient extends Application {
          * The menu where the user can choose different quizes.
          */
         public Scene endScene(){
-            quitButton = new Button("Quit");
-            quitButton.setOnAction(this::buttonPress);
-
-            restartButton = new Button("restart");
+            quitButton.setOnAction(this::buttonPress); 
             restartButton.setOnAction(this::buttonPress);
 
             HBox endLayout = new HBox();
@@ -212,34 +260,53 @@ public class QuizClient extends Application {
         }
 
         /**
-     * Handles events from buttonpresses
-     * @param event the ActionEvent of the press 
-     */
+         * Handles events from buttonpresses
+         * @param event the ActionEvent of the press 
+         */
         public void buttonPress(ActionEvent event) {
+            Quiz quiz = getSelectedQuiz(); 
             if (event.getSource().equals(submitButton)) {
                 //check if the question is correct 
                 String submittedAnswer = inputField.getText();
-                selectedQuiz.handleAnswer(submittedAnswer);
+                quiz.handleAnswer(submittedAnswer);
                 Question question = getCurrentQuestion();
 
                 //check if the question turned out correct 
                 if (question.getCorrect())
                     setCorrectCounter(getCorrectCounter() + 1);
+                    updateDisplayedStatus(); 
                 //if there is a new question
-                if (selectedQuiz.nextQuestion()) {
+                if (quiz.nextQuestion()) {
                     updateDisplayedQuestion();
                 } else {
-                    displayEndOptions();                     
+                    displayEndScene();                     
                 }
             }
             if (event.getSource().equals(quitButton)) {
                 Platform.exit();
             }
             if (event.getSource().equals(restartButton)) {
-                selectedQuiz.setCurrentQuestionIndex(0);
+                quiz.setCurrentQuestionIndex(0);
                 setCorrectCounter(0);
                 toggleButton(submitButton); 
                 start(new Stage());
+            }
+        }
+
+         /**
+         * Handles events from clicks on labels 
+         * @param event the ActionEvent of the press 
+         */
+        public void labelPressed(MouseEvent event){
+            //NOTE: Assumes that all presses are from quizNamesView, for now. 
+
+            Label source = (Label) event.getSource(); 
+            String quizName = source.getText(); 
+            Quiz quiz = quizesManager.getQuiz(quizName); 
+
+            if(quiz != null){
+                setSelectedQuiz(quiz); 
+                displayQuizScene(); 
             }
         }
     }

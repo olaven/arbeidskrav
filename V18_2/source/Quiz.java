@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 /**
  * Quiz
  * Handles logic of a quiz 
- * Presents questions in a serial way 
+ * Presents questions in a serial way
  */
 public class Quiz {
 
