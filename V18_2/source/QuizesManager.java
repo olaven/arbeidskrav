@@ -42,7 +42,8 @@ public class QuizesManager {
 
         Quiz tk1100Quiz = new Quiz("tk110 Quiz!");
 
-        tk1100Quiz.add(new Question("What does DNS stand for?", "dns", "file:../images/flags/netherlands.png"));
+        tk1100Quiz.add(new Question("What does DNS stand for?", "dns"));
+        tk1100Quiz.add(new Question("Confidentiality, Integrity and ..?", "Availability"));
 
         quizes.put(tk1100Quiz.getTitle(), tk1100Quiz);
     }

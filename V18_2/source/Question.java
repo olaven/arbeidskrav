@@ -10,9 +10,21 @@ public class Question {
     private String answer;
     private String imagePath;
     private boolean correct;
+    
+    /**
+     * New question 
+     * @param text the text of question 
+     * @param answer the correct to the text 
+     */
+    public Question(String text, String answer){
+        this(text, answer, "file:../images/default.jpg"); 
+    }
 
     /**
-     * This is the constructor I intend to use 
+     * New question
+     * @param text the text of question 
+     * @param answer the correct to the text 
+     * @param imagePath the path to image 
      */
     public Question(String text, String answer, String imagePath) {
         this(text, answer, imagePath, false);
