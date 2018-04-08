@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane; 
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
@@ -19,6 +20,8 @@ import javafx.scene.image.Image;
 
 import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent; 
+
+import javafx.geometry.Insets; 
 
 /**
  * QuizClient
@@ -226,12 +229,15 @@ public class QuizClient extends Application {
          * Where questions are answered.
          */
         public Scene quizScene(){
-            headerLabel.setFont(new Font(100));
+            headerLabel.setFont(new Font(50));
             headerLabel.setText(getSelectedQuiz().getTitle());
+            headerLabel.setMinWidth(width / 2); 
 
             imageView.setImage(new Image(getCurrentQuestion().getImagePath(), imageWidth, imageHeight, false, false));
             
             questionLabel.setText(getCurrentQuestion().getText());
+            questionLabel.setFont(new Font(25)); 
+            questionLabel.setMinWidth(width / 3); 
 
             inputField.setPromptText("enter answer");
 
@@ -240,10 +246,16 @@ public class QuizClient extends Application {
 
             statusField.setText(getStatus());
 
-            VBox vBox = new VBox();
-            vBox.getChildren().addAll(headerLabel, imageView, questionLabel, inputField, submitButton, statusField);
+            GridPane gridPane = new GridPane(); 
+            gridPane.setPadding(new Insets(0, width / 10, 0, width / 10)); 
+            gridPane.add(headerLabel, 0, 0, 4, 1);
+            gridPane.add(imageView, 0, 1, 4, 1);
+            gridPane.add(questionLabel, 0, 2, 2, 1);  
+            gridPane.add(inputField, 0, 3, 3, 1); 
+            gridPane.add(submitButton, 3, 3, 1, 1); 
 
-            return getBasicScene(vBox, width, height); 
+
+            return getBasicScene(gridPane, width, height); 
 
         }
         /**
