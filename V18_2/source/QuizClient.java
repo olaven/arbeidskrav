@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.input.MouseEvent; 
 
 import javafx.geometry.Insets; 
+import javax.management.openmbean.OpenDataException;
 
 /**
  * QuizClient
@@ -42,6 +43,7 @@ public class QuizClient extends Application {
     private int imageWidth;
     private int imageHeight;
     private int correctCounter;
+    private ArrayList<Stage> openStages;
     private String mainStyleSheetPath = "file:../stylesheets/main.css";
 
     //GUI-fields 
@@ -76,6 +78,7 @@ public class QuizClient extends Application {
         imageWidth = width / 3;
         imageHeight = height / 3;
         correctCounter = 0;
+        openStages = new ArrayList<Stage>(); 
 
         //GUI-fields 
         //-chooseScene 
@@ -122,8 +125,11 @@ public class QuizClient extends Application {
 
     /**
      * Updates status (x/total)
+     * @param correct positive or negative feedback 
      */
-    public void updateDisplayedStatus(){
+    public void updateDisplayedStatus(boolean correct){
+        String color = (correct ? "green" : "red"); 
+        statusField.setStyle("-fx-text-fill: " + color + ";");
         statusField.setText(getStatus()); 
     }
 
@@ -164,8 +170,19 @@ public class QuizClient extends Application {
         stage.setScene(scene); 
         stage.setTitle(title); 
         stage.show(); 
+
+        openStages.add(stage); 
     }
 
+    /**
+     * Closes all stages that are open
+     * -> contained in openStages 
+     */
+    public void closeAllOpenStages(){
+        for(Stage stage : getOpenStages()){
+            stage.close(); 
+        }
+    }
 
     /**
      * Toggles wether the specified button is toggled or not 
@@ -189,6 +206,10 @@ public class QuizClient extends Application {
 
     private String getStatus() {
         return (getCorrectCounter() + "/" + selectedQuiz.getQuestionCount()).toString();
+    }
+
+    private ArrayList<Stage> getOpenStages(){
+        return openStages; 
     }
 
     //set
@@ -215,9 +236,20 @@ public class QuizClient extends Application {
             VBox vBox = new VBox(); 
 
             for(String quizName : quizNames){
-                Label label = new Label(quizName); 
-                label.setOnMouseClicked(this::labelPressed); 
-                quizNamesView.getItems().add(label); 
+                /* 
+                    Fix to avoid duplicates on reload. 
+                    Not elegant or efficient. Should get back to this. 
+                */
+                boolean alreadyAdded = false; 
+                for(Label label : quizNamesView.getItems()){
+                    if(label.getText().equals(quizName))
+                        alreadyAdded = true; 
+                }
+                if(!alreadyAdded){
+                    Label label = new Label(quizName); 
+                    label.setOnMouseClicked(this::labelPressed); 
+                    quizNamesView.getItems().add(label);
+                }
             }
 
             vBox.getChildren().addAll(chooseHeader, quizNamesView); 
@@ -245,6 +277,7 @@ public class QuizClient extends Application {
             submitButton.setDefaultButton(true);
 
             statusField.setText(getStatus());
+            statusField.setFont(new Font(30)); 
 
             GridPane gridPane = new GridPane(); 
             gridPane.setPadding(new Insets(0, width / 10, 0, width / 10)); 
@@ -253,6 +286,7 @@ public class QuizClient extends Application {
             gridPane.add(questionLabel, 0, 2, 2, 1);  
             gridPane.add(inputField, 0, 3, 3, 1); 
             gridPane.add(submitButton, 3, 3, 1, 1); 
+            gridPane.add(statusField, 0, 4); 
 
 
             return getBasicScene(gridPane, width, height); 
@@ -299,9 +333,13 @@ public class QuizClient extends Application {
                 Question question = getCurrentQuestion();
 
                 //check if the question turned out correct 
-                if (question.getCorrect())
+                if (question.getCorrect()){
                     setCorrectCounter(getCorrectCounter() + 1);
-                    updateDisplayedStatus(); 
+                    updateDisplayedStatus(true);
+                } else {
+                    updateDisplayedStatus(false); 
+                }
+
                 //if there is a new question
                 if (quiz.nextQuestion()) {
                     updateDisplayedQuestion();
@@ -313,6 +351,7 @@ public class QuizClient extends Application {
                 Platform.exit();
             }
             if (event.getSource().equals(restartButton)) {
+                closeAllOpenStages(); 
                 quiz.setCurrentQuestionIndex(0);
                 setCorrectCounter(0);
                 toggleButton(submitButton); 
