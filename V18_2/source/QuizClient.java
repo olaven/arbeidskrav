@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane; 
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
@@ -218,7 +219,8 @@ public class QuizClient extends Application {
 
             vBox.getChildren().addAll(chooseHeader, quizNamesView); 
 
-            return new Scene(vBox, width / 4, height / 4); 
+            return getBasicScene(vBox, width / 4, height / 4); 
+
         }
         /**
          * Where questions are answered.
@@ -241,7 +243,8 @@ public class QuizClient extends Application {
             VBox vBox = new VBox();
             vBox.getChildren().addAll(headerLabel, imageView, questionLabel, inputField, submitButton, statusField);
 
-            return new Scene(vBox, width, height);
+            return getBasicScene(vBox, width, height); 
+
         }
         /**
          * The menu where the user can choose different quizes.
@@ -253,11 +256,22 @@ public class QuizClient extends Application {
             HBox endLayout = new HBox();
             endLayout.getChildren().addAll(quitButton, restartButton);
 
-            Scene scene = new Scene(endLayout, width / 4, height / 4);
-            scene.getStylesheets().add(mainStyleSheetPath);
+            return getBasicScene(endLayout, width / 4, height / 4); 
+        }
 
+        /**
+         * Builds a basic scene and returns it 
+         * Cleans up some of the repeated code above.
+         */
+        private Scene getBasicScene(Pane layout, int widht, int height){
+            Scene scene = new Scene(layout, widht, height); 
+            scene.getStylesheets().add(mainStyleSheetPath); 
             return scene; 
         }
+
+        //------------------------------------------------------------
+        //EVENT HANDLING 
+        //------------------------------------------------------------
 
         /**
          * Handles events from buttonpresses
@@ -268,6 +282,7 @@ public class QuizClient extends Application {
             if (event.getSource().equals(submitButton)) {
                 //check if the question is correct 
                 String submittedAnswer = inputField.getText();
+                inputField.clear(); 
                 quiz.handleAnswer(submittedAnswer);
                 Question question = getCurrentQuestion();
 
